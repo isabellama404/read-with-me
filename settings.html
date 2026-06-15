@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Read With Me</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+                   'Microsoft YaHei', sans-serif;
+      background: #f8f9fa;
+      color: #1f2937;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 40px 16px 60px;
+      font-size: 14px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 32px 36px;
+      max-width: 500px;
+      width: 100%;
+      height: fit-content;
+    }
+
+    /* ─── Header ─────────────────────────────── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .header-icon { font-size: 28px; line-height: 1; flex-shrink: 0; }
+    .header-text h1 { font-size: 17px; font-weight: 700; color: #111827; }
+    .header-text p  { font-size: 12px; color: #9ca3af; margin-top: 3px; }
+
+    /* ─── Form groups ────────────────────────── */
+    .form-group { margin-bottom: 20px; }
+
+    label.field-label {
+      display: block;
+      font-weight: 600;
+      font-size: 13px;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+    .hint-tag {
+      font-weight: 400;
+      color: #9ca3af;
+      font-size: 11px;
+      margin-left: 5px;
+    }
+
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #1f2937;
+      background: #fff;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type="password"]:focus,
+    select:focus {
+      border-color: #374151;
+    }
+
+    .field-hint {
+      margin-top: 5px;
+      font-size: 11px;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+    .field-hint a { color: #6b7280; text-decoration: underline; }
+    .field-hint a:hover { color: #374151; }
+
+    .level-desc {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #6b7280;
+      background: #f9fafb;
+      border: 1px solid #f3f4f6;
+      border-radius: 5px;
+      padding: 7px 10px;
+      line-height: 1.6;
+      min-height: 30px;
+    }
+
+    .error-hint {
+      font-size: 11px;
+      color: #dc2626;
+      margin-top: 4px;
+      display: none;
+    }
+    .error-hint.show { display: block; }
+
+    /* ─── Radio group ────────────────────────── */
+    .radio-group { display: flex; gap: 8px; }
+    .radio-option {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 9px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+      font-weight: 400;
+      margin-bottom: 0;
+    }
+    .radio-option:has(input:checked) {
+      border-color: #374151;
+      background: #f9fafb;
+    }
+    .radio-option input[type="radio"] {
+      width: auto;
+      margin: 3px 0 0;
+      flex-shrink: 0;
+      accent-color: #374151;
+      cursor: pointer;
+    }
+    .radio-title { font-size: 13px; font-weight: 600; color: #374151; display: block; }
+    .radio-desc  { font-size: 11px; color: #9ca3af; display: block; margin-top: 2px; }
+
+    /* ─── Divider ────────────────────────────── */
+    .section-divider {
+      height: 1px;
+      background: #f3f4f6;
+      margin: 24px 0;
+    }
+
+    /* ─── Save button ────────────────────────── */
+    .btn-save {
+      width: 100%;
+      padding: 10px;
+      background: #111827;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.12s;
+      margin-top: 8px;
+    }
+    .btn-save:hover { background: #1f2937; }
+
+    /* ─── Success banner ─────────────────────── */
+    .success {
+      display: none;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #166534;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+    .success.show { display: block; }
+
+    /* ─── Tutorial reset ─────────────────────── */
+    .btn-tutorial-reset {
+      width: 100%;
+      margin-top: 8px;
+      padding: 9px;
+      background: none;
+      color: #6b7280;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.12s;
+    }
+    .btn-tutorial-reset:hover { color: #374151; border-color: #d1d5db; background: #f9fafb; }
+    .tutorial-reset-msg {
+      display: none;
+      text-align: center;
+      font-size: 12px;
+      color: #059669;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="page-header">
+      <span class="header-icon">📖</span>
+      <div class="header-text">
+        <h1 id="settings-title">Settings</h1>
+        <p id="settings-subtitle">Configure your reading assistant</p>
+      </div>
+    </div>
+
+    <form id="form-settings">
+
+      <!-- API Key -->
+      <div class="form-group">
+        <label class="field-label" for="api-key">
+          DeepSeek API Key
+          <span class="hint-tag" id="lbl-required">Required</span>
+        </label>
+        <input type="password" id="api-key"
+               placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxx"
+               autocomplete="off" spellcheck="false" />
+        <div class="field-hint" id="lbl-api-hint"></div>
+        <div class="error-hint" id="key-error" role="alert"></div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Interface language -->
+      <div class="form-group">
+        <label class="field-label" for="interface-language" id="lbl-lang-label">
+          界面语言 / Interface Language
+        </label>
+        <select id="interface-language">
+          <option value="auto">Auto-detect / 自动检测</option>
+          <option value="zh">中文</option>
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+        </select>
+        <div class="field-hint" id="lbl-lang-hint"></div>
+      </div>
+
+      <!-- User level -->
+      <div class="form-group">
+        <label class="field-label" for="user-level" id="lbl-level-label">My English Level</label>
+        <select id="user-level"><!-- generated by JS --></select>
+        <div class="level-desc" id="level-desc"></div>
+        <div class="field-hint" id="lbl-level-hint"></div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Trigger mode -->
+      <div class="form-group">
+        <label class="field-label" id="lbl-trigger-label">Tooltip Trigger</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="interactionMode" value="hover">
+            <div>
+              <span class="radio-title" id="lbl-hover-title">Hover</span>
+              <span class="radio-desc"  id="lbl-hover-desc">Auto-show on mouse hover</span>
+            </div>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="interactionMode" value="click">
+            <div>
+              <span class="radio-title" id="lbl-click-title">Click</span>
+              <span class="radio-desc"  id="lbl-click-desc">Show on click</span>
+            </div>
+          </label>
+        </div>
+        <div class="field-hint" id="lbl-trigger-hint"></div>
+      </div>
+
+      <button type="submit" class="btn-save" id="save-btn">Save Settings</button>
+    </form>
+
+    <div class="success" id="success" role="status"></div>
+
+    <div class="section-divider" style="margin-top: 20px;"></div>
+    <button type="button" class="btn-tutorial-reset" id="btn-tutorial-reset">重新显示引导教程</button>
+    <div class="tutorial-reset-msg" id="tutorial-reset-msg">✓ 下次打开插件时将重新显示引导</div>
+
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Read With Me",
+  "version": "1.0.0",
+  "description": "AI英文阅读助手 - 智能标注难词、长难句和固定搭配",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Read With Me"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["i18n.js", "content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "settings.html"
+}

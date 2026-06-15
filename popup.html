@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Read With Me</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 300px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+                   'Microsoft YaHei', sans-serif;
+      font-size: 14px;
+      color: #1f2937;
+      background: #fff;
+    }
+
+    /* ─── Header ─────────────────────────────── */
+    .header {
+      padding: 12px 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .header-brand { font-size: 14px; font-weight: 600; color: #111827; letter-spacing: -0.01em; }
+    .header-sub   { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+
+    /* ─── Tab bar ────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0 12px;
+    }
+    .tab-btn {
+      padding: 8px 10px;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      background: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: #6b7280;
+      font-family: inherit;
+      transition: color 0.12s;
+    }
+    .tab-btn.active            { color: #2563eb; border-bottom-color: #2563eb; }
+    .tab-btn:hover:not(.active){ color: #374151; }
+
+    .tab-panel        { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ─── Content area ───────────────────────── */
+    .content { padding: 12px 16px; }
+
+    /* ─── Banner ─────────────────────────────── */
+    .banner {
+      display: none;
+      background: #fefce8;
+      border: 1px solid #fde047;
+      border-radius: 6px;
+      padding: 8px 11px;
+      font-size: 12px;
+      color: #854d0e;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .banner.show { display: block; }
+    .banner-link {
+      color: #2563eb;
+      cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      font: inherit;
+      font-size: 12px;
+      padding: 0;
+    }
+
+    /* ─── Results card ───────────────────────── */
+    .results {
+      display: none;
+      background: #f8f9fa;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+    }
+    .results.show { display: flex; }
+    .stat    { flex: 1; text-align: center; }
+    .stat-val {
+      font-size: 17px;
+      font-weight: 700;
+      color: #111827;
+      display: block;
+      line-height: 1.3;
+    }
+    .stat-val.easy   { color: #059669; }
+    .stat-val.medium { color: #d97706; }
+    .stat-val.hard   { color: #dc2626; }
+    .stat-lbl { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+    .divider  { width: 1px; background: #e5e7eb; margin: 4px 0; }
+
+    /* ─── Spinner ────────────────────────────── */
+    .spinner-wrap { display: none; flex-direction: column; align-items: center; padding: 18px 0; }
+    .spinner-wrap.show { display: flex; }
+    .spinner {
+      width: 22px; height: 22px;
+      border: 2px solid #e5e7eb;
+      border-top-color: #374151;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    .spinner-lbl { font-size: 12px; color: #9ca3af; margin-top: 8px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Error / Unsupported ────────────────── */
+    .error {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      padding: 8px 11px;
+      font-size: 12px;
+      color: #991b1b;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .error.show { display: block; }
+    .unsupported {
+      display: none;
+      text-align: center;
+      padding: 14px 0 8px;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+    .unsupported.show { display: block; }
+
+    /* ─── Buttons ────────────────────────────── */
+    .btn-primary {
+      width: 100%;
+      padding: 9px;
+      background: #111827;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.12s;
+      margin-bottom: 8px;
+    }
+    .btn-primary:hover:not(:disabled) { background: #1f2937; }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .btn-row { display: flex; gap: 6px; }
+    .btn-sec {
+      flex: 1;
+      padding: 7px 6px;
+      background: #fff;
+      color: #374151;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .btn-sec:hover { background: #f8f9fa; border-color: #d1d5db; }
+
+    .btn-ghost {
+      width: 100%;
+      padding: 7px;
+      background: none;
+      color: #9ca3af;
+      border: 1px solid #f3f4f6;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.12s;
+      margin-top: 8px;
+    }
+    .btn-ghost:hover    { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+    .btn-ghost:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ─── History panel ──────────────────────── */
+    .history-filters { display: flex; gap: 6px; margin-bottom: 10px; }
+    .filter-btn {
+      padding: 4px 12px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      color: #6b7280;
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .filter-btn.active             { background: #eff6ff; border-color: #bfdbfe; color: #2563eb; font-weight: 500; }
+    .filter-btn:hover:not(.active) { background: #f3f4f6; }
+
+    .history-list { max-height: 268px; overflow-y: auto; }
+    .history-list::-webkit-scrollbar       { width: 4px; }
+    .history-list::-webkit-scrollbar-track { background: transparent; }
+    .history-list::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 2px; }
+
+    .history-empty {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 12px;
+      padding: 24px 0;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .history-item:last-child { border-bottom: none; }
+
+    .history-item-main  { flex: 1; min-width: 0; }
+    .history-item-title {
+      display: block;
+      font-size: 13px;
+      color: #1f2937;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background: none;
+      border: none;
+      padding: 0;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      line-height: 1.4;
+      transition: color 0.12s;
+    }
+    .history-item-title:hover { color: #2563eb; }
+    .history-item-date  { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+
+    .history-item-actions { display: flex; gap: 1px; flex-shrink: 0; padding-top: 1px; }
+    .history-action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 3px 5px;
+      border-radius: 4px;
+      color: #d1d5db;
+      font-family: inherit;
+      line-height: 1;
+      transition: background 0.1s, color 0.1s;
+    }
+    .history-action-btn:hover         { background: #f3f4f6; color: #6b7280; }
+    .history-action-btn.btn-collected { color: #f59e0b; }
+
+    /* ─── Tutorial panel ────────────────────────── */
+    body.tutorial-mode > .header,
+    body.tutorial-mode > .tab-bar,
+    body.tutorial-mode > .tab-panel { display: none !important; }
+
+    #tutorial-panel { display: none; flex-direction: column; min-height: 280px; }
+    body.tutorial-mode #tutorial-panel { display: flex; }
+
+    .tut-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8px 16px;
+    }
+    .tut-icon { text-align: center; font-size: 26px; margin-bottom: 6px; line-height: 1; }
+
+    #tut-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111827;
+      text-align: center;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    #tut-body {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.65;
+    }
+    #tut-body ul { padding-left: 16px; margin-top: 0; }
+    #tut-body li { margin-bottom: 5px; }
+    #tut-body .tut-badge {
+      display: inline-block;
+      background: #111827;
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    #tut-body .tut-badge.outline {
+      background: #fff;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+
+    .tut-footer { padding: 8px 16px 14px; }
+    .tut-dots   { display: flex; gap: 5px; justify-content: center; margin-bottom: 10px; }
+    .tut-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      transition: background 0.2s;
+    }
+    .tut-dot.active { background: #2563eb; }
+
+    .tut-actions { display: flex; gap: 6px; }
+    #tut-skip {
+      padding: 7px 12px;
+      background: #fff;
+      color: #6b7280;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      white-space: nowrap;
+    }
+    #tut-skip:hover { background: #f8f9fa; color: #374151; border-color: #d1d5db; }
+    #tut-next {
+      flex: 1;
+      padding: 7px 6px;
+      background: #111827;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.12s;
+    }
+    #tut-next:hover { background: #1f2937; }
+
+  </style>
+</head>
+<body>
+
+  <!-- ─── Tutorial panel ─────────────────────────────────────── -->
+  <div id="tutorial-panel">
+    <div class="header">
+      <div class="header-brand">Read With Me</div>
+      <div class="header-sub">新手引导</div>
+    </div>
+    <div class="tut-content">
+      <div class="tut-icon" id="tut-icon"></div>
+      <h3 id="tut-title"></h3>
+      <div id="tut-body"></div>
+    </div>
+    <div class="tut-footer">
+      <div class="tut-dots">
+        <span class="tut-dot"></span>
+        <span class="tut-dot"></span>
+        <span class="tut-dot"></span>
+      </div>
+      <div class="tut-actions">
+        <button id="tut-skip">跳过</button>
+        <button id="tut-next">下一步</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="header">
+    <div class="header-brand">Read With Me</div>
+    <div class="header-sub">英文阅读助手</div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-analyze"></button>
+    <button class="tab-btn"        id="tab-history"></button>
+  </div>
+
+  <!-- 分析 tab -->
+  <div class="tab-panel active" id="panel-analyze">
+    <div class="content">
+      <div class="banner" id="banner">
+        <span id="banner-msg-pre"></span><button class="banner-link" id="btn-banner-settings"></button><span id="banner-msg-post"></span>
+      </div>
+
+      <div class="results" id="results">
+        <div class="stat">
+          <span class="stat-val" id="difficulty">—</span>
+          <div class="stat-lbl" id="difficulty-label"></div>
+        </div>
+        <div class="divider"></div>
+        <div class="stat">
+          <span class="stat-val" id="reading-time">—</span>
+          <div class="stat-lbl" id="time-label"></div>
+        </div>
+      </div>
+
+      <div class="spinner-wrap" id="spinner">
+        <div class="spinner"></div>
+        <div class="spinner-lbl">分析中，请稍候…</div>
+      </div>
+
+      <div class="error" id="error"></div>
+      <div class="unsupported" id="unsupported"></div>
+
+      <button class="btn-primary" id="btn-analyze"></button>
+
+      <div class="btn-row">
+        <button class="btn-sec" id="btn-settings"></button>
+        <button class="btn-sec" id="btn-vocab"></button>
+      </div>
+
+      <button class="btn-ghost" id="btn-clear-cache"></button>
+    </div>
+  </div>
+
+  <!-- 历史 tab -->
+  <div class="tab-panel" id="panel-history">
+    <div class="content">
+      <div class="history-filters">
+        <button class="filter-btn active" id="filter-all"></button>
+        <button class="filter-btn"        id="filter-collected"></button>
+      </div>
+      <div class="history-list" id="history-list">
+        <div class="history-empty" id="history-empty-init"></div>
+      </div>
+      <button class="btn-ghost" id="btn-clear-history"></button>
+    </div>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
