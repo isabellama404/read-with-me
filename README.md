@@ -37,7 +37,7 @@
 
 | 配置项 | 说明 |
 |--------|------|
-| DeepSeek API Key | 必填。在 [platform.deepseek.com](https://platform.deepseek.com) 免费申请 |
+| DeepSeek API Key | 必填。在 [platform.deepseek.com](https://platform.deepseek.com) 申请 |
 | 界面语言 | 自动检测或手动选择 |
 | 我的英语水平 | 用于过滤标注，只显示 ≥ 你水平的词 |
 | 工具提示触发 | 悬停显示 / 点击显示 |
