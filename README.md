@@ -65,6 +65,7 @@
 标注规则：只显示 **难度 ≥ 你水平** 的内容。
 
 ## 项目结构
+```
 extension/
 ├── manifest.json # 插件配置
 ├── background.js # Service Worker：AI 调用、缓存、历史
@@ -77,8 +78,7 @@ extension/
 ├── settings.js
 ├── vocabulary.html # 单词本页面
 └── vocabulary.js
-
-text
+```
 
 ## 隐私说明
 
